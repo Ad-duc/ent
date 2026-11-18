@@ -486,6 +486,7 @@ var (
 	ProfilesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "apply_to_all", Type: field.TypeBool, Default: false},
 		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"winget"}, Default: "winget"},
 		{Name: "disabled", Type: field.TypeBool, Default: false},

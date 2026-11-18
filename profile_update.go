@@ -47,6 +47,26 @@ func (pu *ProfileUpdate) SetNillableName(s *string) *ProfileUpdate {
 	return pu
 }
 
+// SetDescription sets the "description" field.
+func (pu *ProfileUpdate) SetDescription(s string) *ProfileUpdate {
+	pu.mutation.SetDescription(s)
+	return pu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pu *ProfileUpdate) SetNillableDescription(s *string) *ProfileUpdate {
+	if s != nil {
+		pu.SetDescription(*s)
+	}
+	return pu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (pu *ProfileUpdate) ClearDescription() *ProfileUpdate {
+	pu.mutation.ClearDescription()
+	return pu
+}
+
 // SetApplyToAll sets the "apply_to_all" field.
 func (pu *ProfileUpdate) SetApplyToAll(b bool) *ProfileUpdate {
 	pu.mutation.SetApplyToAll(b)
@@ -343,6 +363,12 @@ func (pu *ProfileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.Name(); ok {
 		_spec.SetField(profile.FieldName, field.TypeString, value)
 	}
+	if value, ok := pu.mutation.Description(); ok {
+		_spec.SetField(profile.FieldDescription, field.TypeString, value)
+	}
+	if pu.mutation.DescriptionCleared() {
+		_spec.ClearField(profile.FieldDescription, field.TypeString)
+	}
 	if value, ok := pu.mutation.ApplyToAll(); ok {
 		_spec.SetField(profile.FieldApplyToAll, field.TypeBool, value)
 	}
@@ -613,6 +639,26 @@ func (puo *ProfileUpdateOne) SetNillableName(s *string) *ProfileUpdateOne {
 	if s != nil {
 		puo.SetName(*s)
 	}
+	return puo
+}
+
+// SetDescription sets the "description" field.
+func (puo *ProfileUpdateOne) SetDescription(s string) *ProfileUpdateOne {
+	puo.mutation.SetDescription(s)
+	return puo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (puo *ProfileUpdateOne) SetNillableDescription(s *string) *ProfileUpdateOne {
+	if s != nil {
+		puo.SetDescription(*s)
+	}
+	return puo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (puo *ProfileUpdateOne) ClearDescription() *ProfileUpdateOne {
+	puo.mutation.ClearDescription()
 	return puo
 }
 
@@ -941,6 +987,12 @@ func (puo *ProfileUpdateOne) sqlSave(ctx context.Context) (_node *Profile, err e
 	}
 	if value, ok := puo.mutation.Name(); ok {
 		_spec.SetField(profile.FieldName, field.TypeString, value)
+	}
+	if value, ok := puo.mutation.Description(); ok {
+		_spec.SetField(profile.FieldDescription, field.TypeString, value)
+	}
+	if puo.mutation.DescriptionCleared() {
+		_spec.ClearField(profile.FieldDescription, field.TypeString)
 	}
 	if value, ok := puo.mutation.ApplyToAll(); ok {
 		_spec.SetField(profile.FieldApplyToAll, field.TypeBool, value)

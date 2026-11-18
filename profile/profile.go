@@ -16,6 +16,8 @@ const (
 	FieldID = "id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
 	// FieldApplyToAll holds the string denoting the apply_to_all field in the database.
 	FieldApplyToAll = "apply_to_all"
 	// FieldType holds the string denoting the type field in the database.
@@ -69,6 +71,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldName,
+	FieldDescription,
 	FieldApplyToAll,
 	FieldType,
 	FieldDisabled,
@@ -99,6 +102,8 @@ func ValidColumn(column string) bool {
 var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultDescription holds the default value on creation for the "description" field.
+	DefaultDescription string
 	// DefaultApplyToAll holds the default value on creation for the "apply_to_all" field.
 	DefaultApplyToAll bool
 	// DefaultDisabled holds the default value on creation for the "disabled" field.
@@ -141,6 +146,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
 // ByApplyToAll orders the results by the apply_to_all field.

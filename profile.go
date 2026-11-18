@@ -18,6 +18,8 @@ type Profile struct {
 	ID int `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
 	// ApplyToAll holds the value of the "apply_to_all" field.
 	ApplyToAll bool `json:"apply_to_all,omitempty"`
 	// Type holds the value of the "type" field.
@@ -101,7 +103,7 @@ func (*Profile) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case profile.FieldID:
 			values[i] = new(sql.NullInt64)
-		case profile.FieldName, profile.FieldType:
+		case profile.FieldName, profile.FieldDescription, profile.FieldType:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -129,6 +131,12 @@ func (pr *Profile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				pr.Name = value.String
+			}
+		case profile.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				pr.Description = value.String
 			}
 		case profile.FieldApplyToAll:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -211,6 +219,9 @@ func (pr *Profile) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
 	builder.WriteString("name=")
 	builder.WriteString(pr.Name)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(pr.Description)
 	builder.WriteString(", ")
 	builder.WriteString("apply_to_all=")
 	builder.WriteString(fmt.Sprintf("%v", pr.ApplyToAll))

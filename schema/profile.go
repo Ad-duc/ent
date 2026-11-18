@@ -16,6 +16,7 @@ type Profile struct {
 func (Profile) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").NotEmpty(),
+		field.String("description").Optional().Default(""),
 		field.Bool("apply_to_all").Default(false),
 		field.Enum("type").Values("winget").Optional().Default("winget"),
 		field.Bool("disabled").Default(false),
