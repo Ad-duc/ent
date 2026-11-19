@@ -17493,6 +17493,7 @@ type ProfileMutation struct {
 	typ           string
 	id            *int
 	name          *string
+	description   *string
 	apply_to_all  *bool
 	_type         *profile.Type
 	disabled      *bool
@@ -17649,6 +17650,55 @@ func (m *ProfileMutation) OldName(ctx context.Context) (v string, err error) {
 // ResetName resets all changes to the "name" field.
 func (m *ProfileMutation) ResetName() {
 	m.name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *ProfileMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ProfileMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Profile entity.
+// If the Profile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProfileMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ProfileMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[profile.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ProfileMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[profile.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ProfileMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, profile.FieldDescription)
 }
 
 // SetApplyToAll sets the "apply_to_all" field.
@@ -18076,9 +18126,12 @@ func (m *ProfileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProfileMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.name != nil {
 		fields = append(fields, profile.FieldName)
+	}
+	if m.description != nil {
+		fields = append(fields, profile.FieldDescription)
 	}
 	if m.apply_to_all != nil {
 		fields = append(fields, profile.FieldApplyToAll)
@@ -18099,6 +18152,8 @@ func (m *ProfileMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case profile.FieldName:
 		return m.Name()
+	case profile.FieldDescription:
+		return m.Description()
 	case profile.FieldApplyToAll:
 		return m.ApplyToAll()
 	case profile.FieldType:
@@ -18116,6 +18171,8 @@ func (m *ProfileMutation) OldField(ctx context.Context, name string) (ent.Value,
 	switch name {
 	case profile.FieldName:
 		return m.OldName(ctx)
+	case profile.FieldDescription:
+		return m.OldDescription(ctx)
 	case profile.FieldApplyToAll:
 		return m.OldApplyToAll(ctx)
 	case profile.FieldType:
@@ -18137,6 +18194,13 @@ func (m *ProfileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case profile.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
 		return nil
 	case profile.FieldApplyToAll:
 		v, ok := value.(bool)
@@ -18189,6 +18253,9 @@ func (m *ProfileMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ProfileMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(profile.FieldDescription) {
+		fields = append(fields, profile.FieldDescription)
+	}
 	if m.FieldCleared(profile.FieldType) {
 		fields = append(fields, profile.FieldType)
 	}
@@ -18206,6 +18273,9 @@ func (m *ProfileMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ProfileMutation) ClearField(name string) error {
 	switch name {
+	case profile.FieldDescription:
+		m.ClearDescription()
+		return nil
 	case profile.FieldType:
 		m.ClearType()
 		return nil
@@ -18219,6 +18289,9 @@ func (m *ProfileMutation) ResetField(name string) error {
 	switch name {
 	case profile.FieldName:
 		m.ResetName()
+		return nil
+	case profile.FieldDescription:
+		m.ResetDescription()
 		return nil
 	case profile.FieldApplyToAll:
 		m.ResetApplyToAll()

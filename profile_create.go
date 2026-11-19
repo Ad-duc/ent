@@ -32,6 +32,20 @@ func (pc *ProfileCreate) SetName(s string) *ProfileCreate {
 	return pc
 }
 
+// SetDescription sets the "description" field.
+func (pc *ProfileCreate) SetDescription(s string) *ProfileCreate {
+	pc.mutation.SetDescription(s)
+	return pc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pc *ProfileCreate) SetNillableDescription(s *string) *ProfileCreate {
+	if s != nil {
+		pc.SetDescription(*s)
+	}
+	return pc
+}
+
 // SetApplyToAll sets the "apply_to_all" field.
 func (pc *ProfileCreate) SetApplyToAll(b bool) *ProfileCreate {
 	pc.mutation.SetApplyToAll(b)
@@ -184,6 +198,10 @@ func (pc *ProfileCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (pc *ProfileCreate) defaults() {
+	if _, ok := pc.mutation.Description(); !ok {
+		v := profile.DefaultDescription
+		pc.mutation.SetDescription(v)
+	}
 	if _, ok := pc.mutation.ApplyToAll(); !ok {
 		v := profile.DefaultApplyToAll
 		pc.mutation.SetApplyToAll(v)
@@ -249,6 +267,10 @@ func (pc *ProfileCreate) createSpec() (*Profile, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(profile.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := pc.mutation.Description(); ok {
+		_spec.SetField(profile.FieldDescription, field.TypeString, value)
+		_node.Description = value
 	}
 	if value, ok := pc.mutation.ApplyToAll(); ok {
 		_spec.SetField(profile.FieldApplyToAll, field.TypeBool, value)
@@ -406,6 +428,24 @@ func (u *ProfileUpsert) UpdateName() *ProfileUpsert {
 	return u
 }
 
+// SetDescription sets the "description" field.
+func (u *ProfileUpsert) SetDescription(v string) *ProfileUpsert {
+	u.Set(profile.FieldDescription, v)
+	return u
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *ProfileUpsert) UpdateDescription() *ProfileUpsert {
+	u.SetExcluded(profile.FieldDescription)
+	return u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *ProfileUpsert) ClearDescription() *ProfileUpsert {
+	u.SetNull(profile.FieldDescription)
+	return u
+}
+
 // SetApplyToAll sets the "apply_to_all" field.
 func (u *ProfileUpsert) SetApplyToAll(v bool) *ProfileUpsert {
 	u.Set(profile.FieldApplyToAll, v)
@@ -499,6 +539,27 @@ func (u *ProfileUpsertOne) SetName(v string) *ProfileUpsertOne {
 func (u *ProfileUpsertOne) UpdateName() *ProfileUpsertOne {
 	return u.Update(func(s *ProfileUpsert) {
 		s.UpdateName()
+	})
+}
+
+// SetDescription sets the "description" field.
+func (u *ProfileUpsertOne) SetDescription(v string) *ProfileUpsertOne {
+	return u.Update(func(s *ProfileUpsert) {
+		s.SetDescription(v)
+	})
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *ProfileUpsertOne) UpdateDescription() *ProfileUpsertOne {
+	return u.Update(func(s *ProfileUpsert) {
+		s.UpdateDescription()
+	})
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *ProfileUpsertOne) ClearDescription() *ProfileUpsertOne {
+	return u.Update(func(s *ProfileUpsert) {
+		s.ClearDescription()
 	})
 }
 
@@ -766,6 +827,27 @@ func (u *ProfileUpsertBulk) SetName(v string) *ProfileUpsertBulk {
 func (u *ProfileUpsertBulk) UpdateName() *ProfileUpsertBulk {
 	return u.Update(func(s *ProfileUpsert) {
 		s.UpdateName()
+	})
+}
+
+// SetDescription sets the "description" field.
+func (u *ProfileUpsertBulk) SetDescription(v string) *ProfileUpsertBulk {
+	return u.Update(func(s *ProfileUpsert) {
+		s.SetDescription(v)
+	})
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *ProfileUpsertBulk) UpdateDescription() *ProfileUpsertBulk {
+	return u.Update(func(s *ProfileUpsert) {
+		s.UpdateDescription()
+	})
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *ProfileUpsertBulk) ClearDescription() *ProfileUpsertBulk {
+	return u.Update(func(s *ProfileUpsert) {
+		s.ClearDescription()
 	})
 }
 

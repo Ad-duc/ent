@@ -296,12 +296,16 @@ func init() {
 	profileDescName := profileFields[0].Descriptor()
 	// profile.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	profile.NameValidator = profileDescName.Validators[0].(func(string) error)
+	// profileDescDescription is the schema descriptor for description field.
+	profileDescDescription := profileFields[1].Descriptor()
+	// profile.DefaultDescription holds the default value on creation for the description field.
+	profile.DefaultDescription = profileDescDescription.Default.(string)
 	// profileDescApplyToAll is the schema descriptor for apply_to_all field.
-	profileDescApplyToAll := profileFields[1].Descriptor()
+	profileDescApplyToAll := profileFields[2].Descriptor()
 	// profile.DefaultApplyToAll holds the default value on creation for the apply_to_all field.
 	profile.DefaultApplyToAll = profileDescApplyToAll.Default.(bool)
 	// profileDescDisabled is the schema descriptor for disabled field.
-	profileDescDisabled := profileFields[3].Descriptor()
+	profileDescDisabled := profileFields[4].Descriptor()
 	// profile.DefaultDisabled holds the default value on creation for the disabled field.
 	profile.DefaultDisabled = profileDescDisabled.Default.(bool)
 	profileissueFields := schema.ProfileIssue{}.Fields()
